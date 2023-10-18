@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+   
+
+    <title>home| </title>
+
+    <style>
+        body{
+            background-color:ghostwhite
+        }
+
+        #subsciptions:hover
+        {
+            box-shadow: 5px cyan;
+            border:2px solid cyan;
+        }
+        #pricing{
+            background-color: rgb(207, 200, 206);
+        }
+
+        a{
+          text-decoration: none;
+          color: black;
+          
+        }
+        .homepage{
+          width: 100%;
+    height: 500px;
+    padding-top: 100px;
+    background: linear-gradient(180.43deg, rgba(118, 114, 114, 0.6) 0%, rgba(0,0,0,0.80) 100%), url(./HomePageimg1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+          
+        }
+
+        #Welcomemessage{
+      padding-left: 100px ;
+      color:white ;
+    font-size: 80px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    line-height: 33.3px;
+    
+
+          
+        }
+
+    </style>
+</head>
+<body>
+  <div class="container-xxl my-1 d-block-flex position-sticky">
+   
+    <nav class="navbar navbar-expand-lg navbar-light bg-light  justify-content-end ">
+        <div class="container-fluid">
+
+            <!-- this for brand logo -->
+            <a href="#intro mx-5" class="btn">
+                <img src="./logo.png" alt="Bill Buddy" class="img-fluid rounded-2" width="50px" height="50px" >
+            </a>
+
+            <!-- button toggler  -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="./home.html">Bill Buddy</a>
+              </li>
+              
+              <li class="nav-item mx-5">
+                <a class="nav-link" href="./groups.html">Groups</a>
+              </li>
+
+              <li class="nav-item mx-5">
+                <a class="nav-link" href="./expense.html">Expense</a>
+              </li>
+
+              <li class="nav-item mx-5">
+                <a class="nav-link" href="./owes.html">Owes</a>
+              </li>
+              
+            </ul>
+            <form class="d-flex">
+              
+              <button class="btn btn-outline-success" type="submit"><a href="./login.html" style="color: rgb(16, 154, 46);">Logout</a></button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </div>
+  <div class="container">
+
+      <!-- Add the necessary HTML elements to display the owes information -->
+      <div class="container">
+        <h2>Owes</h2>
+        <div class="row" id="owesList">
+          <!-- The list of owes will be populated dynamically using JavaScript -->
+        </div>
+      </div>
+    
+      <!-- Add the Bootstrap JS via CDN (optional, only if you need Bootstrap JavaScript features) -->
+
+    
+ 
+    
+
+
+
+
+
+   
+ 
+
+
+
+
+
+    
+  
+
+
+    
+
+      <script>
+        // Function to fetch the owes information from the server
+        function fetchOwes() {
+          fetch("/getOwes") // Replace this URL with the appropriate server endpoint
+            .then(response => response.json())
+            .then(data => {
+              const owesList = document.getElementById("owesList");
+              owesList.innerHTML = ""; // Clear existing content
+    
+              data.map(owe => {
+                const oweCard = document.createElement("div");
+                oweCard.classList.add("col-md-4", "mb-4");
+    
+                oweCard.innerHTML = `
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">${owe.expenseName}</h5>
+                      <p class="card-text"><strong>Amount:</strong> $${owe.amount}</p>
+                      <p class="card-text"><strong>Payer:</strong> ${owe.payer}</p>
+                      <button class="btn btn-primary" onclick="sendApproval('${owe.expenseName}')"> Pay & Send Approval</button>
+                    </div>
+                  </div>
+                `;
+    
+                owesList.appendChild(oweCard);
+              });
+            })
+            .catch(error => {
+              console.error("Error fetching owes:", error);
+            });
+        }
+    
+        // Function to send approval for an expense
+        function sendApproval(expenseName) {
+          fetch("/updateStatus", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ expenseName }),
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data); // Optionally, you can show a success message to the payer
+              fetchOwes(); // Refresh the list of owes after sending approval
+              // Optionally, you can show a success message to the payer
+              // showAlert(data.message, "success");
+            })
+            .catch(error => {
+              console.error(`Error sending approval: ${error}`);
+              // Optionally, you can show an error message to the payer if sending approval fails
+              // showAlert("Error sending approval. Please try again.", "danger");
+            });
+        }
+    
+        // Call fetchOwes() function to get the owes information when the page loads
+        fetchOwes();
+      </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Groups</title>
+  <!-- Add the Bootstrap CSS via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+
+
+  <div class="container-xxl my-1 d-block-flex position-sticky">
+   
+    <nav class="navbar navbar-expand-lg navbar-light bg-light  justify-content-end ">
+        <div class="container-fluid">
+
+            <!-- this for brand logo -->
+            <a href="#intro mx-5" class="btn">
+                <img src="./logo.png" alt="Bill Buddy" class="img-fluid rounded-2" width="50px" height="50px" >
+            </a>
+
+            <!-- button toggler  -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="./home.html">Bill Buddy</a>
+              </li>
+              
+              <li class="nav-item mx-5">
+                <a class="nav-link" href="./groups.html">Groups</a>
+              </li>
+
+              <li class="nav-item mx-5">
+                <a class="nav-link" href="./expense.html">Expense</a>
+              </li>
+
+              <li class="nav-item mx-5">
+                <a class="nav-link" href="./owes.html">Owes</a>
+              </li>
+              
+            </ul>
+            <form class="d-flex">
+              
+              <button class="btn btn-outline-success" type="submit"><a  class="success"href="./login.html" style="color: rgb(16, 154, 46);text-decoration: none;">Logout</a></button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+    <h2>Group</h2>
+
+    <h2>Add Member</h2>
+    <form id="addMemberForm">
+      <div class="mb-3">
+        <label for="addMemberName" class="form-label">Member name:</label>
+        <input type="text" class="form-control" id="addMemberName" name="addMemberName" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Member</button>
+    </form>
+
+    <h2>Remove Member</h2>
+    <form id="removeMemberForm">
+      <div class="mb-3">
+        <label for="removeMemberName" class="form-label">Member name:</label>
+        <input type="text" class="form-control" id="removeMemberName" name="removeMemberName" required>
+      </div>
+      <button type="submit" class="btn btn-danger">Remove Member</button>
+    </form>
+
+    <h2>View Members </h2>
+    <div id="groupList"></div>
+
+
+  </div>
+</div>
+
+
+<div class="container">
+  
+</div>
+
+  <!-- Add the Bootstrap JS via CDN (optional, only if you need Bootstrap JavaScript features) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Function to fetch group members from the server
+    function fetchGroupMembers() {
+      fetch("/getGroupMembers") // Replace this URL with the appropriate server endpoint
+        .then(response => response.json())
+        .then(members => {
+          const groupList = document.getElementById("groupList");
+          groupList.innerHTML = ""; // Clear existing content
+
+          members.group.map(member => {
+            const memberDiv = document.createElement("div");
+            memberDiv.textContent = member;
+            groupList.appendChild(memberDiv);
+          });
+        })
+        .catch(error => {
+          console.error("Error fetching group members:", error);
+        });
+    }
+
+    // Call fetchGroupMembers() function to get the group members when the page loads
+    fetchGroupMembers();
+
+    // Function to show alert messages
+    function showAlert(message, type) {
+      const alertDiv = document.createElement("div");
+      alertDiv.className = `alert alert-${type} mt-3`;
+      alertDiv.textContent = message;
+
+      const container = document.querySelector(".container");
+      container.appendChild(alertDiv);
+
+      // Remove the alert after 3 seconds
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 3000);
+    }
+
+    // Function to handle adding a member to the group
+    document.getElementById("addMemberForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const addMemberName = document.getElementById("addMemberName").value;
+
+      // Send the member data to the server for adding to the group
+      fetch("/addMember", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ memberName: addMemberName }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // Optionally, you can display a success message to the user after adding the member
+        fetchGroupMembers(); // Refresh the list of group members after adding a member
+        showAlert(data.message, "success"); // Show success alert message
+      })
+      .catch(error => {
+        console.error("Error adding member:", error);
+        // Optionally, you can display an error message to the user if adding member fails
+        showAlert("Error adding member. Please try again.", "danger"); // Show error alert message
+      });
+    });
+
+    // Function to handle removing a member from the group
+    document.getElementById("removeMemberForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const removeMemberName = document.getElementById("removeMemberName").value;
+
+      // Send the member data to the server for removing from the group
+      fetch("/removeMember", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ memberName: removeMemberName }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // Optionally, you can display a success message to the user after removing the member
+        fetchGroupMembers(); // Refresh the list of group members after removing a member
+        showAlert(data.message, "success"); // Show success alert message
+      })
+      .catch(error => {
+        console.error("Error removing member:", error);
+        // Optionally, you can display an error message to the user if removing member fails
+        showAlert("Error removing member. Please try again.", "danger"); // Show error alert message
+      });
+    });
+
+    
+
+    // Function to handle the "View Members" button click
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+[
+  {
+    "username": "Suresh",
+    "password": "12345678",
+    "group": [
+      "Amrutha",
+      "Kunal"
+    ],
+    "expenses": [],
+    "owes": [
+      {
+        "payer": "vineet",
+        "amount": 617.5,
+        "status": "UNSETTLED",
+        "expenseName": "lunch 1"
+      }
+    ]
+  },
+  {
+    "username": "Kalavathi",
+    "password": "12345678",
+    "group": [
+      "vineet",
+      "Suresh",
+      "Kunal"
+    ],
+    "expenses": [],
+    "owes": []
+  },
+  {
+    "username": "Tejas_S",
+    "password": "12345678",
+    "group": [],
+    "s": [],
+    "owes": []
+  },
+  {
+    "username": "Rajneesh",
+    "password": "87654321",
+    "group": [],
+    "s": [],
+    "owes": []
+  },
+  {
+    "username": "Arun",
+    "password": "0987654321",
+    "group": [],
+    "s": [],
+    "owes": []
+  },
+  {
+    "username": "vineet",
+    "password": "12345678",
+    "group": [
+      "vineet",
+      "Suresh",
+      "Kalavathi"
+    ],
+    "expenses": [
+      {
+        "expenseName": "lunch 1",
+        "expenseDate": "2023-08-01",
+        "expenseAmount": 1235,
+        "payees": [
+          "vineet",
+          "Suresh"
+        ],
+        "expenseDivision": "equal",
+        "payer": "vineet",
+        "status": "UNSETTLED"
+      }
+    ],
+    "owes": []
+  },
+  {
+    "username": "krishh",
+    "password": "qwertyui",
+    "group": [],
+    "expenses": [],
+    "owes": []
+  },
+  {
+    "username": "Amrutha",
+    "password": "12345678",
+    "group": [],
+    "expenses": [],
+    "owes": [
+      {}
+    ]
+  },
+  {
+    "username": "Rakshith",
+    "password": "12345678",
+    "group": [],
+    "expenses": [],
+    "owes": []
+  },
+  {
+    "username": "Kunal",
+    "password": "asdfghjkl",
+    "group": [],
+    "expenses": [],
+    "owes": []
+  },
+  {
+    "username": "Sangam",
+    "password": "12345678",
+    "group": [
+      "Amrutha",
+      "Tejas_S",
+      "Suresh"
+    ],
+    "expenses": [],
+    "owes": []
+  },
+  {
+    "username": "tejas",
+    "password": "asdfghjkl",
+    "group": [
+      "Suresh",
+      "vineet"
+    ],
+    "expenses": [],
+    "owes": []
+  }
+]
